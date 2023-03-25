@@ -1,0 +1,2 @@
+*.data filter=lfs diff=lfs merge=lfs -text
+Build/WebGL-Multi-Test-Build.data filter=lfs diff=lfs merge=lfs -text

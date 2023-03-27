@@ -54,9 +54,8 @@ window.addEventListener('load', function() {
 
 	
 	socket.on('SOCKET_MOVE', (email, position, rotation, socket_id) => {
-		//if(socket_id == socket.id) return;
+		if(socket_id == socket.id) return;
 		var moveData = socket_id + ':' + position + ':' + rotation;
-		console.log(rotation);
 		if(socket_id == socket.id) return;
 
 		if(window.unityInstance!=null)
@@ -68,6 +67,7 @@ window.addEventListener('load', function() {
 	
     socket.on('UPDATE_MOVE_AND_ROTATE', function(id,position,rotation) {
 	    var currentUserAtr = id+':'+position+':'+rotation;
+		
 		 	
 		if(window.unityInstance!=null)
 		{

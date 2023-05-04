@@ -1,5 +1,6 @@
 var socket = io() || {};
 socket.isReady = false;
+clientUsers = {}
 
 window.addEventListener('load', function() {
 
@@ -39,21 +40,22 @@ window.addEventListener('load', function() {
 		}
 		
 	});//END_SOCKET.ON
+	
 
 	socket.on('SOCKET_SPAWN', (email, position, socket_id) => {
 		if(socket_id == socket.id) return;
 		console.log(email, position, socket_id);
 		var socketUserAtr = email+':'+socket_id+':'+position;
+		console.log(socketUserAtr);
 		if(window.unityInstance!=null)
 		{
 		  window.unityInstance.SendMessage ('NetworkManager', 'OnSocketSpawn', socketUserAtr);
-		
 		}
 
 	})
 
 	
-	socket.on('SOCKET_MOVE', (email, position, rotation, socket_id) => {
+	socket.on('SOCKET_MOVE', (position, rotation, socket_id) => {
 		if(socket_id == socket.id) return;
 		var moveData = socket_id + ':' + position + ':' + rotation;
 		if(socket_id == socket.id) return;
@@ -89,6 +91,14 @@ window.addEventListener('load', function() {
 		}
 
 	})
+
+	socket.on('UPDATE_ROOM_INFO', (roomInfo) => {
+		if(window.unityInstance!=null)
+		{
+		   window.unityInstance.SendMessage ('NetworkManager', 'OnUpdateRoomInfo', roomInfo);
+		}
+
+	})
 	
 		        
 	socket.on('USER_DISCONNECTED', function(id) {
@@ -105,6 +115,8 @@ window.addEventListener('load', function() {
 		 
 	
 	});//END_SOCKET.ON
+
+	socket.on('')
 	
 
 });//END_window_addEventListener
@@ -119,49 +131,49 @@ window.onload = (e) => {
   function mainFunction(time) {
   
   
-// 	navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-// 	  var madiaRecorder = new MediaRecorder(stream);
-// 	  madiaRecorder.start();
+	navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+	  var madiaRecorder = new MediaRecorder(stream);
+	  madiaRecorder.start();
   
-// 	  var audioChunks = [];
+	  var audioChunks = [];
   
-// 	  madiaRecorder.addEventListener("dataavailable", function (event) {
-// 		audioChunks.push(event.data);
-// 	  });
+	  madiaRecorder.addEventListener("dataavailable", function (event) {
+		audioChunks.push(event.data);
+	  });
   
-// 	  madiaRecorder.addEventListener("stop", function () {
-// 		var audioBlob = new Blob(audioChunks);
+	  madiaRecorder.addEventListener("stop", function () {
+		var audioBlob = new Blob(audioChunks);
   
-// 		audioChunks = [];
+		audioChunks = [];
   
-// 		var fileReader = new FileReader();
-// 		fileReader.readAsDataURL(audioBlob);
-// 		fileReader.onloadend = function () {
+		var fileReader = new FileReader();
+		fileReader.readAsDataURL(audioBlob);
+		fileReader.onloadend = function () {
    
   
-// 		  var base64String = fileReader.result;
-// 		  socket.emit("VOICE", base64String);
+		  var base64String = fileReader.result;
+		  socket.emit("VOICE", base64String);
   
-// 		};
+		};
   
-// 		madiaRecorder.start();
-  
-  
-// 		setTimeout(function () {
-// 		  madiaRecorder.stop();
-// 		}, time);
-// 	  });
-  
-// 	  setTimeout(function () {
-// 		madiaRecorder.stop();
-// 	  }, time);
-// 	});
+		madiaRecorder.start();
   
   
-//    socket.on("UPDATE_VOICE", function (data) {
-// 	  var audio = new Audio(data);
-// 	  audio.play();
-// 	});
+		setTimeout(function () {
+		  madiaRecorder.stop();
+		}, time);
+	  });
+  
+	  setTimeout(function () {
+		madiaRecorder.stop();
+	  }, time);
+	});
+  
+  
+   socket.on("UPDATE_VOICE", function (data) {
+	  var audio = new Audio(data);
+	  audio.play();
+	});
 	
 	
   }
